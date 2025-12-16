@@ -82,7 +82,7 @@ Best for technical concepts. One file = One logical unit.
 *   **Anchor:** The Filename (e.g., `20231215.md`).
 *   **Front:** Filename (or `title` in YAML).
 *   **Back:** The entire markdown body.
-*   **Cloze:** Supported via `{...}` syntax.
+*   **Cloze:** Supported via `==...==` syntax (Obsidian Highlight).
 *   **Reverse:** If `reverse: true`, generates a second card (Back -> Front).
 
 ### Mode B: Vocab List (`list: true`)
@@ -113,7 +113,7 @@ Best for language learning. One file = Many cards.
 1.  **Fetch:** Query `cards` where `due_date <= NOW()` AND `is_suspended = false`.
 2.  **Render:**
     *   Render Markdown/LaTeX.
-    *   If `cloze`, replace `{text}` with `[...]` (clickable to reveal).
+    *   If `cloze`, replace `==text==` with `[...]` (clickable to reveal).
 3.  **Interaction:**
     *   **Show Answer:** Spacebar / Tap.
     *   **Rate:** 
