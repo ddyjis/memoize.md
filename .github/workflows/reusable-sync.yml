@@ -1,0 +1,52 @@
+name: Reusable Sync Workflow
+
+on:
+  workflow_call:
+    secrets:
+      SUPABASE_URL:
+        required: true
+      SUPABASE_SERVICE_ROLE_KEY:
+        required: true
+      USER_ID:
+        required: true
+
+jobs:
+  sync:
+    name: Sync Markdown to Supabase
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Content Repo
+        uses: actions/checkout@v4
+
+      - name: Checkout System Repo (MemoizeMD)
+        uses: actions/checkout@v4
+        with:
+          repository: tonyli/memoizemd 
+          path: memoizemd
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          cache-dependency-path: memoizemd/pnpm-lock.yaml
+
+      - name: Install System Dependencies
+        working-directory: ./memoizemd
+        run: pnpm install
+
+      - name: Build Sync Script
+        working-directory: ./memoizemd
+        run: pnpm build:sync-script
+
+      - name: Run Sync
+        # Run from root (Content Repo), executing the built script from memoizemd
+        run: node memoizemd/dist/sync.js
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          USER_ID: ${{ secrets.USER_ID }}

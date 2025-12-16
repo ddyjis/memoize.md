@@ -168,9 +168,12 @@ Open `http://localhost:3000`. You should see the cards generated from your mock 
 
 ## Deployment
 
-1.  **Web App:** Deploy this repo to Vercel.
-2.  **Sync Engine:** 
-    *   Create a separate private repository for your notes.
-    *   Copy `scripts/sync.js` and `.github/workflows/sync.yml` to that repository.
-    *   Add Supabase secrets to that repository's settings.
-```
+1.  **Web App:** Deploy this repo (`memoizemd`) to Vercel.
+2.  **Sync Engine (Your Content):**
+    *   Create a separate private repository for your notes (e.g., `my-brain`).
+    *   Create a file `.github/workflows/sync.yml` in that repository.
+    *   Copy the content from `content-sync.yml.template` in this repo into that file.
+    *   **Settings -> Secrets and variables -> Actions:** Add the following repository secrets:
+        *   `SUPABASE_URL`
+        *   `SUPABASE_SERVICE_ROLE_KEY` (Service Role Key, NOT Anon Key)
+        *   `USER_ID` (Your User UUID from Supabase Auth)

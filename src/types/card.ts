@@ -1,0 +1,36 @@
+export type CardType = "basic" | "reverse" | "cloze";
+
+export interface Card {
+  id: string; // UUID
+  user_id: string; // UUID
+  source_filepath: string;
+  card_anchor: string;
+  card_type: CardType;
+  front: string;
+  back: string;
+  state: number; // 0=New, 1=Learning, 2=Review, 3=Relearning
+  stability: number;
+  difficulty: number;
+  due_date: string | null; // ISO Date string
+  last_review: string | null; // ISO Date string
+  is_suspended: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// For cards generated from files before they match DB
+export interface DerivedCard {
+  source_filepath: string;
+  card_anchor: string;
+  card_type: CardType;
+  front: string;
+  back: string;
+}
+
+export type UpsertCard = DerivedCard & {user_id: string; is_suspended: boolean};
+
+export interface FrontMatter {
+  tags?: string[];
+  reverse?: boolean; // Default: false
+  list?: boolean; // Default: false
+}

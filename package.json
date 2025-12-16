@@ -8,13 +8,17 @@
     "start": "next start",
     "lint": "biome lint .",
     "format": "biome format . --write",
-    "check": "biome check --write . --unsafe"
+    "check": "biome check --write . --unsafe",
+    "build:sync-script": "esbuild scripts/sync.ts --bundle --minify --platform=node --outfile=dist/sync.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.88.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
+    "glob": "^13.0.0",
     "gray-matter": "^4.0.3",
+    "js-sha256": "^0.11.1",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "react": "19.2.1",
@@ -25,7 +29,8 @@
     "remark-parse": "^11.0.0",
     "tailwind-merge": "^3.4.0",
     "ts-fsrs": "^5.2.3",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.9",
@@ -34,6 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "esbuild": "^0.27.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"
