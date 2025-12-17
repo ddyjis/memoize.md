@@ -9,7 +9,7 @@ on:
 
 jobs:
   call-sync:
-    uses: tonyli/memoizemd/.github/workflows/reusable-sync.yml@main
+    uses: ddyjis/memoizemd/.github/workflows/reusable-sync.yml@main
     secrets:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
