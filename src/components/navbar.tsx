@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import {AuthButton} from "@/components/auth-button";
 import {createClient} from "@/lib/supabase/server";
 
@@ -13,7 +14,7 @@ export async function Navbar() {
       <div className="container mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold text-xl tracking-tight text-zinc-900 dark:text-zinc-50">
+            <span className="font-bold text-xl text-zinc-900 tracking-tight dark:text-zinc-50">
               Memoize.md
             </span>
           </Link>

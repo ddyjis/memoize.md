@@ -1,9 +1,10 @@
 "use client";
 
-import {useState} from "react";
+import {SiGithub} from "@icons-pack/react-simple-icons";
 import type {User} from "@supabase/supabase-js";
 import {Check, Copy, LogOut, User as UserIcon} from "lucide-react";
-import {SiGithub} from "@icons-pack/react-simple-icons";
+import {useState} from "react";
+import {toast} from "sonner";
 
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
@@ -17,8 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {createClient} from "@/lib/supabase/client";
-
-import {toast} from "sonner";
 
 export function AuthButton({user}: {user: User | null}) {
   const supabase = createClient();
@@ -90,7 +89,7 @@ export function AuthButton({user}: {user: User | null}) {
           >
             <div className="flex items-center">
               <UserIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span className="text-xs font-mono truncate max-w-[120px]">
+              <span className="max-w-[120px] truncate font-mono text-xs">
                 {user.id}
               </span>
             </div>
