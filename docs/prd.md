@@ -55,6 +55,10 @@ A card is uniquely identified by the combination of three fields:
 | `state` | Int | FSRS State (0=New, 1=Learning, 2=Review, 3=Relearning). |
 | `stability` | Float | FSRS Memory Stability. |
 | `difficulty` | Float | FSRS Difficulty. |
+| `elapsed_days` | Int | Days since last review. |
+| `scheduled_days` | Int | Interval for next review. |
+| `reps` | Int | Total repetition count. |
+| `lapses` | Int | Total lapse count (forgotten). |
 | `due_date` | Timestamptz | Next scheduled review. |
 | `last_review` | Timestamptz | Timestamp of the last rating. |
 | `is_suspended` | Boolean | `true` if source file/line was deleted. |
