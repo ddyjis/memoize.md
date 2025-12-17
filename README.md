@@ -93,6 +93,21 @@ To develop the **Web App** or test the **Sync Logic** locally:
 *   Node.js 20+
 *   A Supabase project (Free tier is fine).
 
+### Auth Setup (GitHub OAuth)
+
+1.  **Create a GitHub App:**
+    *   Go to [GitHub Developer Settings](https://github.com/settings/developers).
+    *   New OAuth App.
+    *   **Homepage URL:** `http://localhost:3000` (for local dev).
+    *   **Authorization callback URL:** `https://<your-project>.supabase.co/auth/v1/callback` (Found in Supabase Auth Settings).
+2.  **Configure Supabase:**
+    *   Go to **Authentication -> Providers -> GitHub**.
+    *   Enable GitHub.
+    *   Paste the **Client ID** and **Client Secret** from your GitHub App.
+    *   Copy the **Redirect URL** from Supabase and ensure it matches your GitHub App's callback URL.
+
+    > **Tip:** If you have separate Supabase projects for Development and Production (recommended), create two separate GitHub Apps (e.g., `Memoize (Dev)` and `Memoize`).
+
 ### Database Setup
 
 Run the following SQL in your Supabase SQL Editor to create the schema and enable FSRS tracking:
