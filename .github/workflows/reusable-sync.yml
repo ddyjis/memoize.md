@@ -22,7 +22,7 @@ jobs:
       - name: Checkout System Repo (MemoizeMD)
         uses: actions/checkout@v4
         with:
-          repository: tonyli/memoizemd 
+          repository: ddyjis/memoizemd 
           path: memoizemd
 
       - uses: pnpm/action-setup@v4
