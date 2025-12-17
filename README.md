@@ -171,7 +171,7 @@ Open `http://localhost:3000`. You should see the cards generated from your mock 
 1.  **Web App:** Deploy this repo (`memoizemd`) to Vercel.
 2.  **Sync Engine (Your Content):**
     *   Create a separate private repository for your notes (e.g., `my-brain`).
-    *   Create a file `.github/workflows/sync.yml` in that repository.
+    *   Create a file `.github/workflows/content-sync.yml` in that repository.
     *   Copy the content from `content-sync.yml.template` in this repo into that file.
     *   **Settings -> Secrets and variables -> Actions:** Add the following repository secrets:
         *   `SUPABASE_URL`
