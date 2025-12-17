@@ -16,7 +16,7 @@ reads them.
 graph TD
     User[You] -->|Write| Obsidian[Obsidian / VS Code]
     Obsidian -->|Push| GitHub[Private Content Repo]
-    GitHub -->|Trigger| Action[GitHub Action (Sync Script)]
+    GitHub -->|Trigger| Action["GitHub Action (Sync Script)"]
     Action -->|Upsert/Suspend| DB[(Supabase DB)]
     WebApp[Next.js Web App] -->|Fetch Due Cards| DB
     WebApp -->|Save FSRS State| DB
