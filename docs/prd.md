@@ -80,8 +80,9 @@ type FrontMatter = {
 Best for technical concepts. One file = One logical unit.
 
 *   **Anchor:** The Filename (e.g., `20231215.md`).
-*   **Front:** Filename (or `title` in YAML).
-*   **Back:** The entire markdown body.
+*   **Front:** Content before the `---` separator (excluding frontmatter).
+*   **Back:** Content after the `---` separator.
+*   **Validation:** If no `---` separator is found AND no cloze `==...==` is present, the card generation **MUST FAIL** (raise error). No fallback to filename.
 *   **Cloze:** Supported via `==...==` syntax (Obsidian Highlight).
 *   **Reverse:** If `reverse: true`, generates a second card (Back -> Front).
 
