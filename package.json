@@ -9,6 +9,7 @@
     "lint": "biome lint .",
     "format": "biome format . --write",
     "check": "biome check --write . --unsafe",
+    "typecheck": "tsc --noEmit",
     "build:sync-script": "esbuild scripts/sync.ts --bundle --minify --platform=node --outfile=dist/sync.js"
   },
   "dependencies": {
