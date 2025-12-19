@@ -8,6 +8,7 @@ import {Button} from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -55,9 +56,21 @@ export function Flashcard({card, onNext}: FlashcardProps) {
         className="mx-auto flex h-full max-w-[800px] flex-col overflow-hidden py-2"
       >
         <CardHeader className="flex-none pt-4">
-          <CardTitle>
-            {isFlipped ? "Answer" : isCloze ? "Cloze Deletion" : "Question"}
+          <CardTitle className="flex items-center justify-between">
+            <span>
+              {isFlipped ? "Answer" : isCloze ? "Cloze Deletion" : "Question"}
+            </span>
+            <span className="text-xs text-zinc-400">
+              {card.source_filepath.replace(/\.md$/, "")}
+            </span>
           </CardTitle>
+          {card.tags && (
+            <CardDescription className="flex flex-wrap gap-x-2">
+              {card.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </CardDescription>
+          )}
         </CardHeader>
         <CardContent className="flex-1 overflow-y-auto">
           <FlashcardContext.Provider value={{isFlipped}}>
