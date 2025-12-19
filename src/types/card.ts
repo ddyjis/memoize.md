@@ -15,6 +15,7 @@ export interface Card {
   scheduled_days: number;
   reps: number;
   lapses: number;
+  tags?: string[];
   due_date: string; // ISO Date string
   last_review: string | null; // ISO Date string
   is_suspended: boolean;
@@ -31,6 +32,7 @@ export interface DerivedCard {
   card_type: CardType;
   front: string;
   back: string;
+  tags?: string[];
 }
 
 export type UpsertCard = DerivedCard & {user_id: string; is_suspended: boolean};

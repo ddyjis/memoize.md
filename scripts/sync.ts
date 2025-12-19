@@ -15,6 +15,17 @@ if (!USER_ID) {
   process.exit(1);
 }
 
+function areTagsEqual(a: string[] | undefined, b: string[] | undefined): boolean {
+  const tagsA = a || [];
+  const tagsB = b || [];
+  if (tagsA.length !== tagsB.length) return false;
+
+  const sortedA = [...tagsA].sort();
+  const sortedB = [...tagsB].sort();
+
+  return sortedA.every((val, index) => val === sortedB[index]);
+}
+
 async function main() {
   console.log("Starting sync...");
 
@@ -61,7 +72,11 @@ async function main() {
 
     if (existing) {
       // Check if content changed
-      if (existing.front !== derived.front || existing.back !== derived.back) {
+      if (
+        existing.front !== derived.front ||
+        existing.back !== derived.back ||
+        !areTagsEqual(existing.tags, derived.tags)
+      ) {
         upsertList.push({
           ...derived, // contains source, anchor, type, front, back
           user_id: USER_ID,

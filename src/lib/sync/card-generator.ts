@@ -38,7 +38,14 @@ function generateListCards(content: string, filePath: string): DerivedCard[] {
     // Use whole line for anchor as requested
     const anchor = sha256(line.trim());
 
-    cards.push({source_filepath, card_anchor: anchor, card_type: "basic", front, back});
+    cards.push({
+      source_filepath,
+      card_anchor: anchor,
+      card_type: "basic",
+      front,
+      back,
+      tags: [], // List mode currently does not support tags from frontmatter
+    });
   }
 
   return cards;
@@ -91,7 +98,14 @@ function generateConceptCards(
     );
   }
 
-  cards.push({source_filepath, card_anchor: anchor, card_type: "basic", front, back});
+  cards.push({
+    source_filepath,
+    card_anchor: anchor,
+    card_type: "basic",
+    front,
+    back,
+    tags: config.tags,
+  });
 
   if (config.reverse) {
     // Reverse only makes sense if we have a distinct Front/Back (Separator mode)
@@ -107,6 +121,7 @@ function generateConceptCards(
         card_type: "reverse",
         front: back,
         back: front,
+        tags: config.tags,
       });
     }
   }

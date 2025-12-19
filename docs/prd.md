@@ -59,6 +59,7 @@ A card is uniquely identified by the combination of three fields:
 | `scheduled_days` | Int | Interval for next review. |
 | `reps` | Int | Total repetition count. |
 | `lapses` | Int | Total lapse count (forgotten). |
+| `tags` | Text[] | Array of tags for filtering. |
 | `due_date` | Timestamptz | Next scheduled review. |
 | `last_review` | Timestamptz | Timestamp of the last rating. |
 | `is_suspended` | Boolean | `true` if source file/line was deleted. |
