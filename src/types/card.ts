@@ -11,12 +11,18 @@ export interface Card {
   state: number; // 0=New, 1=Learning, 2=Review, 3=Relearning
   stability: number;
   difficulty: number;
-  due_date: string | null; // ISO Date string
+  elapsed_days: number;
+  scheduled_days: number;
+  reps: number;
+  lapses: number;
+  due_date: string; // ISO Date string
   last_review: string | null; // ISO Date string
   is_suspended: boolean;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
 }
+
+export type Rating = 1 | 2 | 3 | 4; // Again, Hard, Good, Easy
 
 // For cards generated from files before they match DB
 export interface DerivedCard {

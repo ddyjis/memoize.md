@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "katex/dist/katex.min.css";
+@import "@ibm/plex-math/css/ibm-plex-math-all.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -79,6 +81,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --font-ibm-plex-math: "IBM Plex Math", serif;
 }
 
 .dark {
@@ -123,4 +126,15 @@
     @apply bg-background text-foreground;
     font-family: var(--font-ibm-plex-mono);
   }
+}
+
+/* KaTeX Polish */
+.katex {
+  font-family: var(--font-ibm-plex-math), serif;
+}
+
+/* Ensure the source LaTeX is hidden if CSS import was insufficient */
+.katex-mathml,
+.katex-display > annotation {
+  display: none;
 }
