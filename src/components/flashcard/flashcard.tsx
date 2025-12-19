@@ -29,6 +29,17 @@ export function Flashcard({card, onNext}: FlashcardProps) {
   const isCloze = card.card_type === "cloze";
   const content = isFlipped ? (isCloze ? card.front : card.back) : card.front;
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isFlipped) return;
+      if (e.key === " ") {
+        setIsFlipped(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isFlipped]);
+
   const rateHandler = (rating: Rating) => {
     toast.success(`Rated ${rating}`);
     setTimeout(() => {
