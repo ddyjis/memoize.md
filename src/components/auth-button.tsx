@@ -90,7 +90,7 @@ export function AuthButton({user}: {user: User | null}) {
             <div className="flex items-center">
               <UserIcon className="mr-2 h-4 w-4 text-muted-foreground" />
               <span className="max-w-[120px] truncate font-mono text-xs">
-                {user.id}
+                Copy User ID
               </span>
             </div>
             {copied ? (
