@@ -18,11 +18,12 @@ import type {Card as CardType, Rating} from "@/types/card";
 
 interface FlashcardProps {
   card: CardType;
+  onNext: () => void;
 }
 
 const FlashcardContext = createContext<{isFlipped: boolean}>({isFlipped: false});
 
-export function Flashcard({card}: FlashcardProps) {
+export function Flashcard({card, onNext}: FlashcardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const isCloze = card.card_type === "cloze";
@@ -32,11 +33,12 @@ export function Flashcard({card}: FlashcardProps) {
     toast.success(`Rated ${rating}`);
     setTimeout(() => {
       setIsFlipped(false);
+      onNext();
     }, 500);
   };
 
   return (
-    <div className="h-full min-h-0 w-full">
+    <div className="min-h-0 w-full flex-1">
       <Card
         onClick={() => !isFlipped && setIsFlipped(true)}
         className="mx-auto flex h-full max-w-[800px] flex-col overflow-hidden py-2"
@@ -52,7 +54,7 @@ export function Flashcard({card}: FlashcardProps) {
           </FlashcardContext.Provider>
         </CardContent>
         <CardFooter className="flex-none px-2">
-          {isFlipped && <ReviewControls onRate={rateHandler} />}
+          {isFlipped && <ReviewControls onRate={rateHandler} isFlipped={isFlipped} />}
         </CardFooter>
       </Card>
     </div>
@@ -93,11 +95,13 @@ const components: Options["components"] = {
 
 interface ReviewControlsProps {
   onRate: (rating: Rating) => void;
+  isFlipped: boolean;
 }
 
-function ReviewControls({onRate}: ReviewControlsProps) {
+function ReviewControls({onRate, isFlipped}: ReviewControlsProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isFlipped) return;
       const rating = RATINGS.find((r) => r.key === e.key);
       if (rating) {
         onRate(rating.value);
@@ -105,7 +109,7 @@ function ReviewControls({onRate}: ReviewControlsProps) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onRate]);
+  }, [onRate, isFlipped]);
 
   return (
     <div className="grid w-full grid-cols-4 gap-1">

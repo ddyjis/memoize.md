@@ -127,17 +127,25 @@ Best for language learning. One file = Many cards.
         *   `3`: Good
         *   `4`: Easy
 
-### The "Undo" Buffer
+### Review Session & Syncing (Hybrid Batch Strategy)
 
-To prevent accidental ratings without complex DB rollbacks:
+To ensure performance and offline resilience while maintaining data integrity:
 
-1.  User rates a card.
-2.  UI **optimistically** updates to the next card immediately.
-3.  App waits **5 seconds** (Buffer).
-    *   *Visual:* A toast appears: "Rated Good [Undo]".
-    *   *Hotkey:* `Z` or `Ctrl+Z` triggers Undo.
-4.  **If Undo:** Cancel timer, revert UI to previous card.
-5.  **If Timeout:** Send API request to Supabase to save stats.
+1.  **prefetch**: At session start, fetch a batch of due cards (e.g., 20-50) from Supabase.
+2.  **Optimistic UI**: When a user rates a card:
+    *   Update local state immediately (show next card).
+    *   Push valid review to `pendingReviews` queue.
+3.  **The "Undo" Buffer (5s)**:
+    *   Hold the review in a temporary "buffer" state for 5 seconds.
+    *   *Visual:* Toast "Rated Good [Undo]".
+    *   *Interaction:* User can Undo (pop from stack, revert UI) within this window.
+4.  **Commit to Queue**:
+    *   After 5s (or if user advances multiple cards rapidly), move from "buffer" to "sync queue".
+5.  **Background Sync**:
+    *   Flush the "sync queue" to Supabase:
+        *   **Periodically:** Every ~5 cards or ~30 seconds.
+        *   **On Exit:** Try to flush remaining items when session ends.
+    *   *Failure Handling:* If sync fails, keep items in queue and retry next time (persist in localStorage if possible).
 
 ### Mobile Considerations
 
