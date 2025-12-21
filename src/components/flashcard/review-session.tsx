@@ -1,16 +1,20 @@
 "use client";
 
+import {SiGithub} from "@icons-pack/react-simple-icons";
 import {Loader2} from "lucide-react";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {toast} from "sonner";
 
 import {getDueCards} from "@/actions/cards";
 import {Flashcard} from "@/components/flashcard/flashcard";
 import {Button} from "@/components/ui/button";
+import {useAuth} from "@/features/auth-context";
 import {useReviewQueue} from "@/hooks/use-review-queue";
+import {createClient} from "@/lib/supabase/client";
 import type {Card, Rating} from "@/types/card";
 
 export function ReviewSession() {
+  const {user} = useAuth();
   const [cards, setCards] = useState<Card[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,8 +22,11 @@ export function ReviewSession() {
 
   const {addReview, removeReview} = useReviewQueue();
   const lastReviewRef = useRef<{cardId: string; rating: number} | null>(null);
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
+    if (!user) return;
+
     async function loadCards() {
       try {
         setIsLoading(true);
@@ -34,7 +41,7 @@ export function ReviewSession() {
     }
 
     loadCards();
-  }, []);
+  }, [user]);
 
   const handleUndo = useCallback(() => {
     const lastReview = lastReviewRef.current;
@@ -46,6 +53,13 @@ export function ReviewSession() {
     toast.dismiss();
     toast.info("Review undone");
   }, [removeReview]);
+
+  const handleLogin = useCallback(async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {redirectTo: `${location.origin}/auth/callback`},
+    });
+  }, [supabase.auth]);
 
   const handleRate = useCallback(
     (rating: Rating) => {
@@ -68,6 +82,23 @@ export function ReviewSession() {
     },
     [cards, currentIndex, addReview, handleUndo],
   );
+
+  if (!user) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4">
+        <h2 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-100">
+          Please log in to review cards
+        </h2>
+        <p className="text-zinc-500">
+          You need to be logged in to access your flashcard reviews.
+        </p>
+        <Button onClick={handleLogin} variant="default" size="lg">
+          <SiGithub className="mr-2 h-4 w-4" />
+          Login with GitHub
+        </Button>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

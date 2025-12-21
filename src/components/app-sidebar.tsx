@@ -1,6 +1,5 @@
 "use client";
 
-import type {User} from "@supabase/supabase-js";
 import Link from "next/link";
 
 import {AuthButton} from "@/components/auth-button";
@@ -10,8 +9,11 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import {useAuth} from "@/features/auth-context";
 
-export function AppSidebar({user}: {user: User | null}) {
+export function AppSidebar() {
+  const {user} = useAuth();
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4 dark:border-zinc-800">
