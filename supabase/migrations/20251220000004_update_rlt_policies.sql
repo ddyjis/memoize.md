@@ -21,3 +21,13 @@ drop policy if exists "Users can delete their own cards" on public.cards;
 create policy "Users can delete their own cards" 
 on public.cards for delete 
 using ((select auth.uid()) = user_id);
+
+drop policy if exists "Users can insert their own review logs" on public.review_logs;
+create policy "Users can insert their own review logs"
+on public.review_logs for insert
+with check ((select auth.uid()) = user_id);
+
+drop policy if exists "Users can view their own review logs" on public.review_logs;
+create policy "Users can view their own review logs"
+on public.review_logs for select
+using ((select auth.uid()) = user_id);
