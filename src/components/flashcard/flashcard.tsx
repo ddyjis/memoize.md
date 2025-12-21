@@ -2,7 +2,6 @@
 
 import {createContext, useContext, useEffect, useState} from "react";
 import type {Options} from "rehype-react";
-import {toast} from "sonner";
 
 import {Button} from "@/components/ui/button";
 import {
@@ -19,12 +18,12 @@ import type {Card as CardType, Rating} from "@/types/card";
 
 interface FlashcardProps {
   card: CardType;
-  onNext: () => void;
+  onRate: (rating: Rating) => void;
 }
 
 const FlashcardContext = createContext<{isFlipped: boolean}>({isFlipped: false});
 
-export function Flashcard({card, onNext}: FlashcardProps) {
+export function Flashcard({card, onRate}: FlashcardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const isCloze = card.card_type === "cloze";
@@ -34,20 +33,13 @@ export function Flashcard({card, onNext}: FlashcardProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isFlipped) return;
       if (e.key === " ") {
+        e.preventDefault(); // Prevent scrolling
         setIsFlipped(true);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isFlipped]);
-
-  const rateHandler = (rating: Rating) => {
-    toast.success(`Rated ${rating}`);
-    setTimeout(() => {
-      setIsFlipped(false);
-      onNext();
-    }, 500);
-  };
 
   return (
     <div className="min-h-0 w-full flex-1">
@@ -78,7 +70,7 @@ export function Flashcard({card, onNext}: FlashcardProps) {
           </FlashcardContext.Provider>
         </CardContent>
         <CardFooter className="flex-none px-2">
-          {isFlipped && <ReviewControls onRate={rateHandler} isFlipped={isFlipped} />}
+          {isFlipped && <ReviewControls onRate={onRate} isFlipped={isFlipped} />}
         </CardFooter>
       </Card>
     </div>
@@ -126,6 +118,7 @@ function ReviewControls({onRate, isFlipped}: ReviewControlsProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isFlipped) return;
+
       const rating = RATINGS.find((r) => r.key === e.key);
       if (rating) {
         onRate(rating.value);

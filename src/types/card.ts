@@ -15,6 +15,7 @@ export interface Card {
   scheduled_days: number;
   reps: number;
   lapses: number;
+  learning_steps: number;
   tags?: string[];
   due_date: string; // ISO Date string
   last_review: string | null; // ISO Date string
@@ -41,4 +42,10 @@ export interface FrontMatter {
   tags?: string[];
   reverse?: boolean; // Default: false
   list?: boolean; // Default: false
+}
+
+export interface ReviewSubmission {
+  cardId: string;
+  rating: Rating;
+  reviewedAt: string; // ISO Date string
 }

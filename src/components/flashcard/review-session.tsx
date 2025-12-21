@@ -1,18 +1,23 @@
 "use client";
 
 import {Loader2} from "lucide-react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {toast} from "sonner";
 
 import {getDueCards} from "@/actions/cards";
 import {Flashcard} from "@/components/flashcard/flashcard";
 import {Button} from "@/components/ui/button";
-import type {Card} from "@/types/card";
+import {useReviewQueue} from "@/hooks/use-review-queue";
+import type {Card, Rating} from "@/types/card";
 
 export function ReviewSession() {
   const [cards, setCards] = useState<Card[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const {addReview, removeReview} = useReviewQueue();
+  const lastReviewRef = useRef<{cardId: string; rating: number} | null>(null);
 
   useEffect(() => {
     async function loadCards() {
@@ -30,6 +35,39 @@ export function ReviewSession() {
 
     loadCards();
   }, []);
+
+  const handleUndo = useCallback(() => {
+    const lastReview = lastReviewRef.current;
+    if (!lastReview) return;
+
+    removeReview(lastReview.cardId);
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    lastReviewRef.current = null;
+    toast.dismiss();
+    toast.info("Review undone");
+  }, [removeReview]);
+
+  const handleRate = useCallback(
+    (rating: Rating) => {
+      const currentCard = cards[currentIndex];
+      if (!currentCard) return;
+
+      const review = {
+        cardId: currentCard.id,
+        rating,
+        reviewedAt: new Date().toISOString(),
+      };
+      addReview(review);
+      lastReviewRef.current = {cardId: currentCard.id, rating};
+      setCurrentIndex((prev) => prev + 1);
+      const ratingLabel = ["Again", "Hard", "Good", "Easy"][rating - 1];
+      toast.success(`Rated ${ratingLabel}`, {
+        action: {label: "Undo", onClick: handleUndo},
+        duration: 5000,
+      });
+    },
+    [cards, currentIndex, addReview, handleUndo],
+  );
 
   if (isLoading) {
     return (
@@ -82,11 +120,7 @@ export function ReviewSession() {
         </span>
         <span>{cards.length - currentIndex - 1} remaining</span>
       </div>
-      <Flashcard
-        key={currentCard.id}
-        card={currentCard}
-        onNext={() => setCurrentIndex((prev) => prev + 1)}
-      />
+      <Flashcard key={currentCard.id} card={currentCard} onRate={handleRate} />
     </div>
   );
 }
