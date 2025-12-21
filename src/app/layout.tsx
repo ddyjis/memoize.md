@@ -35,7 +35,7 @@ export default async function RootLayout({
           <SidebarProvider defaultOpen={false} className="h-svh min-h-0">
             <AppSidebar />
             <main className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
-              <SidebarTrigger className="fixed top-6 right-6 z-50" />
+              <SidebarTrigger className="fixed top-4 left-4 z-50" />
               <div className="relative min-h-0 flex-1 overflow-hidden">{children}</div>
             </main>
           </SidebarProvider>

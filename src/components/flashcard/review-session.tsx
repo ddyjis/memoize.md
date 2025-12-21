@@ -85,7 +85,7 @@ export function ReviewSession() {
 
   if (!user) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
+      <>
         <h2 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-100">
           Please log in to review cards
         </h2>
@@ -96,36 +96,36 @@ export function ReviewSession() {
           <SiGithub className="mr-2 h-4 w-4" />
           Login with GitHub
         </Button>
-      </div>
+      </>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
+      <>
         <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
         <p className="text-zinc-500">Loading your cards...</p>
-      </div>
+      </>
     );
   }
 
   if (error) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
+      <>
         <p className="text-red-500">{error}</p>
         <Button onClick={() => window.location.reload()}>Retry</Button>
-      </div>
+      </>
     );
   }
 
   if (cards.length === 0) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
+      <>
         <h2 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-100">
           All caught up!
         </h2>
         <p className="text-zinc-500">No cards due for review right now.</p>
-      </div>
+      </>
     );
   }
 
@@ -133,25 +133,22 @@ export function ReviewSession() {
 
   if (!currentCard) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
+      <>
         <h2 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-100">
           Session Complete
         </h2>
         <p className="text-zinc-500">You've reached the end of this batch.</p>
         <Button onClick={() => window.location.reload()}>Check for more</Button>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center gap-4 p-4">
-      <div className="flex w-full max-w-[800px] justify-between px-4 text-xs text-zinc-500">
-        <span>
-          Card {currentIndex + 1} of {cards.length}
-        </span>
-        <span>{cards.length - currentIndex - 1} remaining</span>
+    <>
+      <div className="ml-auto px-2 text-xs text-zinc-500">
+        Card {currentIndex + 1} of {cards.length}
       </div>
       <Flashcard key={currentCard.id} card={currentCard} onRate={handleRate} />
-    </div>
+    </>
   );
 }
