@@ -15,6 +15,8 @@ export async function batchSubmitReviews(reviews: ReviewSubmission[]) {
     throw new Error("Unauthorized");
   }
 
+  // TODO: Handle reviews for the same cardId in the same batch
+
   const cardIds = reviews.map((r) => r.cardId);
   const {data: cardsData, error: fetchError} = await supabase
     .from("cards")
@@ -36,7 +38,11 @@ export async function batchSubmitReviews(reviews: ReviewSubmission[]) {
   const results = [];
   const fsrs = new FSRS(generatorParameters({enable_fuzz: true}));
 
-  for (const review of reviews) {
+  const sortedReviews = [...reviews].sort(
+    (a, b) => new Date(a.reviewedAt).getTime() - new Date(b.reviewedAt).getTime(),
+  );
+
+  for (const review of sortedReviews) {
     const currentCard = cardMap.get(review.cardId);
 
     if (!currentCard) {
@@ -93,6 +99,21 @@ export async function batchSubmitReviews(reviews: ReviewSubmission[]) {
       });
       continue;
     }
+
+    cardMap.set(review.cardId, {
+      ...currentCard,
+      state: newCard.state,
+      stability: newCard.stability,
+      difficulty: newCard.difficulty,
+      elapsed_days: newCard.elapsed_days,
+      scheduled_days: newCard.scheduled_days,
+      reps: newCard.reps,
+      lapses: newCard.lapses,
+      learning_steps: newCard.learning_steps || 0,
+      due_date: newCard.due.toISOString(),
+      last_review: newCard.last_review?.toISOString() || null,
+      updated_at: new Date().toISOString(),
+    });
 
     const {error: logError} = await supabase
       .from("review_logs")

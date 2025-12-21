@@ -35,20 +35,18 @@ export function useReviewQueue() {
     if (currentQueue.length === 0) return;
 
     try {
-      // Optimistically clear the queue *from the point of view of the sync*, but we need to be
-      // careful if we add new items while syncing. Simplest strategy: Sync everything currently in
-      // queue, and remove successful ones. But for batching, we usually take a snapshot.
+      // Optimistically clear the queue *from the point of view of the sync*, but we need to be careful if we
+      // add new items while syncing. Simplest strategy: Sync everything currently in queue, and remove
+      // successful ones. But for batching, we usually take a snapshot.
 
       const snapshot = [...currentQueue];
-
-      // Perform sync
       const results = await batchSubmitReviews(snapshot);
 
-      // Remove successfully synced items
       const successIds = new Set(
         results.filter((r) => r.status === "success").map((r) => r.cardId),
       );
 
+      // TODO: Handle reviews for the same cardId in the same batch
       setQueue((prev) => prev.filter((r) => !successIds.has(r.cardId)));
 
       const errors = results.filter((r) => r.status === "error");
